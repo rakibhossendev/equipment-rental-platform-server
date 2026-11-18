@@ -11,7 +11,7 @@ getEquipmentsRouter.get("/", async (request, response) => {
         const query = {status: "Approved",};
 
         const {search,category,rentalType,minPrice,maxPrice,availability,sort,} = request.query;
-
+        console.log("Request Query:", request.query);
         // Search by Equipment Name and Location
         if (search) {
             query.$or = [
