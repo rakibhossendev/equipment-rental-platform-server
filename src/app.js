@@ -4,6 +4,7 @@ import router from "./routes/home.route.js";
 import morgan from "morgan"
 import userRouter from "./routes/user/user.route.js";
 import addEquipmentRouter from "./routes/equipments/add-equipments.route.js";
+import getEquipmentsRouter from "./routes/equipments/get.equipment.route.js";
 
 const app = express();
 
@@ -14,5 +15,6 @@ app.use(morgan('dev'))
 app.use("/",router)
 app.use("/users",userRouter)
 app.use("/add-equipment",addEquipmentRouter);
+app.use("/equipments",getEquipmentsRouter)
 
 export default app;
