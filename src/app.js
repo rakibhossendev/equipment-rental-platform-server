@@ -5,6 +5,7 @@ import morgan from "morgan"
 import userRouter from "./routes/user/user.route.js";
 import addEquipmentRouter from "./routes/equipments/add-equipments.route.js";
 import getEquipmentsRouter from "./routes/equipments/get.equipment.route.js";
+import updateUserRoleRouter from "./routes/user/updateUserRole.route.js";
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(morgan('dev'))
 app.use("/",router)
 app.use("/users",userRouter)
 app.use("/add-equipment",addEquipmentRouter);
-app.use("/equipments",getEquipmentsRouter)
+app.use("/equipments",getEquipmentsRouter);
+app.use("/update-user-role",updateUserRoleRouter)
 
 export default app;
