@@ -23,3 +23,18 @@ export const checkAuthenticateUser = async (request, response, next) => {
         return sendAPIResponse(response, [], false, 401, "Invalid or expired token");
     }
 };
+
+/**
+ * Role-based authorization guard.
+ * Must run after checkAuthenticateUser (the JWT payload carries the user object, incl. role).
+ * Usage: router.get("/", checkAuthenticateUser, requireRole("admin"), handler)
+ */
+export const requireRole = (...roles) => (request, response, next) => {
+    const role = request.user?.role;
+
+    if (!role || !roles.includes(role)) {
+        return sendAPIResponse(response, [], false, 403, "Forbidden: insufficient permissions");
+    }
+
+    return next();
+};

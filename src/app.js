@@ -6,6 +6,8 @@ import userRouter from "./routes/user/user.route.js";
 import addEquipmentRouter from "./routes/equipments/add-equipments.route.js";
 import getEquipmentsRouter from "./routes/equipments/get.equipment.route.js";
 import updateUserRoleRouter from "./routes/user/updateUserRole.route.js";
+import updateEquipmentStatusRouter from "./routes/equipments/updateStatus.route.js";
+
 
 const app = express();
 
@@ -17,6 +19,7 @@ app.use("/",router)
 app.use("/users",userRouter)
 app.use("/add-equipment",addEquipmentRouter);
 app.use("/equipments",getEquipmentsRouter);
-app.use("/update-user-role",updateUserRoleRouter)
+app.use("/update-user-role",updateUserRoleRouter);
+app.use("/update-equipment-status",updateEquipmentStatusRouter)
 
 export default app;

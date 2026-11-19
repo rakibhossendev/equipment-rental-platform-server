@@ -8,9 +8,10 @@ const getEquipmentsRouter = Router();
 
 getEquipmentsRouter.get("/", async (request, response) => {
     try {
-        const query = {status: "Approved",};
-        const {search,category,rentalType,minPrice,maxPrice,availability,sort,} = request.query;
+        const query = { status: "Approved", };
+        const { search, category, rentalType, minPrice, maxPrice, availability, sort, } = request.query;
         console.log("Request Query:", request.query);
+        
         // Search by Equipment Name and Location
         if (search) {
             query.$or = [
@@ -60,19 +61,26 @@ getEquipmentsRouter.get("/", async (request, response) => {
             sortQuery = { createdAt: -1 };
         }
 
-        console.log("Query:", query);
-
         const data = await equipment
             .find(query)
             .sort(sortQuery)
             .toArray();
 
-        return sendAPIResponse(response,data,true,200,"Equipment fetched successfully");
+        return sendAPIResponse(response, data, true, 200, "Equipment fetched successfully");
 
     } catch (error) {
         console.log(error);
-        return sendAPIResponse(response,null,false,error.statusCode || 500,error.message || "Internal server error");
+        return sendAPIResponse(response, null, false, error.statusCode || 500, error.message || "Internal server error");
     }
 });
 
+getEquipmentsRouter.get("/all-equipments", async (request, response) => {
+    try {
+        const data = await equipment.find().sort({ createdAt: -1 }).toArray();
+        return sendAPIResponse(response,data,true,200,"User equipment fetched successfully");
+    } catch (error) {
+        console.error("Get user equipment error:", error);
+        return sendAPIResponse(response,null,false,500,"Internal server error");
+    }
+});
 export default getEquipmentsRouter;
