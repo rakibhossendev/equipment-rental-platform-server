@@ -9,7 +9,6 @@ const getEquipmentsRouter = Router();
 getEquipmentsRouter.get("/", async (request, response) => {
     try {
         const query = {status: "Approved",};
-
         const {search,category,rentalType,minPrice,maxPrice,availability,sort,} = request.query;
         console.log("Request Query:", request.query);
         // Search by Equipment Name and Location
@@ -68,24 +67,11 @@ getEquipmentsRouter.get("/", async (request, response) => {
             .sort(sortQuery)
             .toArray();
 
-        return sendAPIResponse(
-            response,
-            data,
-            true,
-            200,
-            "Equipment fetched successfully"
-        );
+        return sendAPIResponse(response,data,true,200,"Equipment fetched successfully");
 
     } catch (error) {
         console.log(error);
-
-        return sendAPIResponse(
-            response,
-            null,
-            false,
-            error.statusCode || 500,
-            error.message || "Internal server error"
-        );
+        return sendAPIResponse(response,null,false,error.statusCode || 500,error.message || "Internal server error");
     }
 });
 

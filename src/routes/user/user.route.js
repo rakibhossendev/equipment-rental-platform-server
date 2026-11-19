@@ -2,10 +2,11 @@ import { Router } from "express";
 import { user } from "../../config/db.js";
 import { ApiError } from "../../utils/apiError.js";
 import { sendAPIResponse } from "../../utils/apiResponse.js";
+import { checkAuthenticateUser } from "../../middleware/auth.js";
 
 const userRouter = Router();
 
-userRouter.get("/", async (request, response) => {
+userRouter.get("/",checkAuthenticateUser, async (request, response) => {
     try {
         const users = await user.find().toArray();
 
