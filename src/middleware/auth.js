@@ -1,6 +1,7 @@
 import { jwtVerify, createRemoteJWKSet } from "jose";
 import { env } from "../config/env.js";
 import { sendAPIResponse } from "../utils/apiResponse.js";
+import {ApiError} from "../utils/apiError.js"
 
 const JWKS = createRemoteJWKSet(new URL(`${env.CLIENT_SIDE_BASE_URL}/api/auth/jwks`));
 
@@ -24,17 +25,15 @@ export const checkAuthenticateUser = async (request, response, next) => {
     }
 };
 
-/**
- * Role-based authorization guard.
- * Must run after checkAuthenticateUser (the JWT payload carries the user object, incl. role).
- * Usage: router.get("/", checkAuthenticateUser, requireRole("admin"), handler)
- */
-export const requireRole = (...roles) => (request, response, next) => {
-    const role = request.user?.role;
+export function verifyRole(...roles){
+    return (request,response,next) =>{
+        console.log(request.user,"verify user role middleware is execute.");
 
-    if (!role || !roles.includes(role)) {
-        return sendAPIResponse(response, [], false, 403, "Forbidden: insufficient permissions");
+        const role = request.user?.role;
+        if(roles.includes(role)){
+            next();
+        }else{
+            throw new ApiError(401,"Forbidden: You do not have the required role to access this resource")
+        }
     }
-
-    return next();
-};
+}

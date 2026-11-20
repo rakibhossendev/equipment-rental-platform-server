@@ -2,12 +2,12 @@ import { Router } from "express";
 import { ObjectId } from "mongodb";
 
 import { user } from "../../config/db.js";
-import { checkAuthenticateUser, requireRole } from "../../middleware/auth.js";
+import { checkAuthenticateUser,verifyRole } from "../../middleware/auth.js";
 import { sendAPIResponse } from "../../utils/apiResponse.js";
 
 const updateUserRoleRouter = Router();
 
-updateUserRoleRouter.patch("/:id", checkAuthenticateUser, requireRole("admin"), async (request, response) => {
+updateUserRoleRouter.patch("/:id", checkAuthenticateUser, verifyRole("admin"), async (request, response) => {
     try {
         const { id } = request.params;
         const { role } = request.body;

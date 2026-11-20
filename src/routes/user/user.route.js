@@ -2,7 +2,7 @@ import { Router } from "express";
 import { user } from "../../config/db.js";
 import { ApiError } from "../../utils/apiError.js";
 import { sendAPIResponse } from "../../utils/apiResponse.js";
-import { checkAuthenticateUser } from "../../middleware/auth.js";
+import { checkAuthenticateUser, verifyRole } from "../../middleware/auth.js";
 import { ObjectId } from "mongodb";
 
 const userRouter = Router();
@@ -25,7 +25,7 @@ userRouter.get("/", checkAuthenticateUser, async (request, response) => {
 });
 
 
-userRouter.get("/profile", checkAuthenticateUser, async (request, response) => {
+userRouter.get("/profile", checkAuthenticateUser,verifyRole("admin","owner","customer"), async (request, response) => {
     try {
         const userId = request.user.sub;
         if (!ObjectId.isValid(userId)) {
@@ -49,7 +49,7 @@ userRouter.get("/profile", checkAuthenticateUser, async (request, response) => {
 
 
 // Update Logged-in User Profile
-userRouter.patch("/profile", checkAuthenticateUser, async (request, response) => {
+userRouter.patch("/profile", checkAuthenticateUser,verifyRole("admin","customer","owner"), async (request, response) => {
     try {
         const userId = request.user.sub;
         const { name, image, phoneNumber, address } = request.body;
