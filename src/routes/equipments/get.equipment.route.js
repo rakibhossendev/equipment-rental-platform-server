@@ -3,6 +3,7 @@ import Router from "express";
 
 import { sendAPIResponse } from "../../utils/apiResponse.js";
 import { equipment } from "../../config/db.js";
+import { ObjectId } from "mongodb";
 
 const getEquipmentsRouter = Router();
 
@@ -11,7 +12,7 @@ getEquipmentsRouter.get("/", async (request, response) => {
         const query = { status: "Approved", };
         const { search, category, rentalType, minPrice, maxPrice, availability, sort, } = request.query;
         console.log("Request Query:", request.query);
-        
+
         // Search by Equipment Name and Location
         if (search) {
             query.$or = [
@@ -61,10 +62,7 @@ getEquipmentsRouter.get("/", async (request, response) => {
             sortQuery = { createdAt: -1 };
         }
 
-        const data = await equipment
-            .find(query)
-            .sort(sortQuery)
-            .toArray();
+        const data = await equipment.find(query).sort(sortQuery).toArray();
 
         return sendAPIResponse(response, data, true, 200, "Equipment fetched successfully");
 
@@ -77,10 +75,36 @@ getEquipmentsRouter.get("/", async (request, response) => {
 getEquipmentsRouter.get("/all-equipments", async (request, response) => {
     try {
         const data = await equipment.find().sort({ createdAt: -1 }).toArray();
-        return sendAPIResponse(response,data,true,200,"User equipment fetched successfully");
+        return sendAPIResponse(response, data, true, 200, "User equipment fetched successfully");
     } catch (error) {
         console.error("Get user equipment error:", error);
+        return sendAPIResponse(response, null, false, 500, "Internal server error");
+    }
+});
+
+
+
+getEquipmentsRouter.get("/:id", async (request, response) => {
+    try {
+        const { id } = request.params;
+
+        // Validate MongoDB ObjectId
+        if (!ObjectId.isValid(id)) {return sendAPIResponse(response,null,false,400,"Invalid equipment ID");
+        }
+        // Find equipment by ID
+        const data = await equipment.findOne({_id: new ObjectId(id),});
+
+        if (!data) {
+            return sendAPIResponse(response,null,false,404,"Equipment not found");
+        }
+
+        return sendAPIResponse(response,data,true,200,"Equipment details fetched successfully");
+
+    } catch (error) {
+        console.error("Get equipment details error:", error);
+
         return sendAPIResponse(response,null,false,500,"Internal server error");
     }
 });
+
 export default getEquipmentsRouter;
