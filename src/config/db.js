@@ -21,3 +21,4 @@ export const equipment = database.collection("equipments");
 export const user = database.collection("user");
 export const bookings = database.collection("bookings");
 export const payments = database.collection("payments");
+export const favorites = database.collection("favorites");

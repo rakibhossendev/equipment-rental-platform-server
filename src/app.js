@@ -11,6 +11,7 @@ import ownerEquipmentsRouter from "./routes/equipments/my-equipment.route.js";
 import paymentRouter from "./routes/booking/payment.route.js";
 import webhookRouter from "./routes/booking/webhook.route.js";
 import myRentalsRouter from "./routes/rentals/myRental.route.js";
+import favoriteRouter from "./routes/favorite/favorite.route.js";
 
 
 const app = express();
@@ -36,6 +37,7 @@ app.use("/update-user-role", updateUserRoleRouter);
 app.use("/update-equipment-status", updateEquipmentStatusRouter);
 app.use("/my-equipments", ownerEquipmentsRouter);
 app.use("/payments", paymentRouter);
-app.use("/my-rentals",myRentalsRouter)
+app.use("/my-rentals",myRentalsRouter);
+app.use("/favorites",favoriteRouter)
 
 export default app;
