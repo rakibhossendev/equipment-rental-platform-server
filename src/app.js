@@ -13,7 +13,7 @@ import webhookRouter from "./routes/booking/webhook.route.js";
 import myRentalsRouter from "./routes/rentals/myRental.route.js";
 import favoriteRouter from "./routes/favorite/favorite.route.js";
 import adminRentalsRouter from "./routes/rentals/adminRental.route.js";
-import adminActionRouter from "./routes/equipments/delete.admin.route.js"
+import adminActionRouter from "./routes/equipments/action.admin.route.js"
 
 
 const app = express();
