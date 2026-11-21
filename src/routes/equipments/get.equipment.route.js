@@ -73,7 +73,7 @@ getEquipmentsRouter.get("/", async (request, response) => {
     }
 });
 
-getEquipmentsRouter.get("/all-equipments",checkAuthenticateUser,verifyRole("admin"), async (request, response) => {
+getEquipmentsRouter.get("/all-equipments", checkAuthenticateUser, verifyRole("admin",), async (request, response) => {
     try {
         const data = await equipment.find().sort({ createdAt: -1 }).toArray();
         return sendAPIResponse(response, data, true, 200, "User equipment fetched successfully");
@@ -85,27 +85,56 @@ getEquipmentsRouter.get("/all-equipments",checkAuthenticateUser,verifyRole("admi
 
 
 
-getEquipmentsRouter.get("/:id",checkAuthenticateUser,verifyRole("customer"), async (request, response) => {
+getEquipmentsRouter.get("/:id", checkAuthenticateUser, verifyRole("customer"), async (request, response) => {
     try {
         const { id } = request.params;
 
         // Validate MongoDB ObjectId
-        if (!ObjectId.isValid(id)) {return sendAPIResponse(response,null,false,400,"Invalid equipment ID");
+        if (!ObjectId.isValid(id)) {
+            return sendAPIResponse(response, null, false, 400, "Invalid equipment ID");
         }
         // Find equipment by ID
-        const data = await equipment.findOne({_id: new ObjectId(id),});
+        const data = await equipment.findOne({ _id: new ObjectId(id), });
 
         if (!data) {
-            return sendAPIResponse(response,null,false,404,"Equipment not found");
+            return sendAPIResponse(response, null, false, 404, "Equipment not found");
         }
 
-        return sendAPIResponse(response,data,true,200,"Equipment details fetched successfully");
+        return sendAPIResponse(response, data, true, 200, "Equipment details fetched successfully");
 
     } catch (error) {
         console.error("Get equipment details error:", error);
 
-        return sendAPIResponse(response,null,false,500,"Internal server error");
+        return sendAPIResponse(response, null, false, 500, "Internal server error");
     }
 });
+
+
+
+getEquipmentsRouter.get("/my-equipment/:id",checkAuthenticateUser,verifyRole("owner"),
+    async (request, response) => {
+        try {
+            const { id } = request.params;
+            const ownerEmail = request.user.email;
+
+            // Validate MongoDB ObjectId
+            if (!ObjectId.isValid(id)) {
+                return sendAPIResponse(response,null,false,400,"Invalid equipment ID");
+            }
+
+            // Find equipment owned by the authenticated owner
+            const data = await equipment.findOne({_id: new ObjectId(id),creatorEmail: ownerEmail,});
+
+            if (!data) {
+                return sendAPIResponse(response,null,false,404,"Equipment not found or you are not authorized to access it");
+            }
+
+            return sendAPIResponse(response,data,true,200,"Equipment details fetched successfully");
+        } catch (error) {
+            console.error("Get owner equipment details error:", error);
+            return sendAPIResponse(response,null,false,500,"Internal server error");
+        }
+    }
+);
 
 export default getEquipmentsRouter;
