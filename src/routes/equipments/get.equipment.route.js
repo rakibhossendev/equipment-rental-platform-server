@@ -73,7 +73,7 @@ getEquipmentsRouter.get("/", async (request, response) => {
     }
 });
 
-getEquipmentsRouter.get("/all-equipments",verifyRole("admin"), async (request, response) => {
+getEquipmentsRouter.get("/all-equipments",checkAuthenticateUser,verifyRole("admin"), async (request, response) => {
     try {
         const data = await equipment.find().sort({ createdAt: -1 }).toArray();
         return sendAPIResponse(response, data, true, 200, "User equipment fetched successfully");
