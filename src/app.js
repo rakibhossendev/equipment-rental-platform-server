@@ -8,20 +8,32 @@ import getEquipmentsRouter from "./routes/equipments/get.equipment.route.js";
 import updateUserRoleRouter from "./routes/user/updateUserRole.route.js";
 import updateEquipmentStatusRouter from "./routes/equipments/updateStatus.route.js";
 import ownerEquipmentsRouter from "./routes/equipments/my-equipment.route.js";
+import paymentRouter from "./routes/booking/payment.route.js";
+import webhookRouter from "./routes/booking/webhook.route.js";
 
 
 const app = express();
 
-app.use(express.json());
-app.use(cors())
-app.use(morgan('dev'))
+app.use(cors());
+app.use(morgan("dev"));
 
-app.use("/",router)
-app.use("/users",userRouter)
-app.use("/add-equipment",addEquipmentRouter);
-app.use("/equipments",getEquipmentsRouter);
-app.use("/update-user-role",updateUserRoleRouter);
-app.use("/update-equipment-status",updateEquipmentStatusRouter);
-app.use("/my-equipments",ownerEquipmentsRouter)
+
+app.use(
+    "/payments/webhook",
+    express.raw({ type: "application/json" }),
+    webhookRouter
+);
+
+
+app.use(express.json());
+
+app.use("/", router);
+app.use("/users", userRouter);
+app.use("/add-equipment", addEquipmentRouter);
+app.use("/equipments", getEquipmentsRouter);
+app.use("/update-user-role", updateUserRoleRouter);
+app.use("/update-equipment-status", updateEquipmentStatusRouter);
+app.use("/my-equipments", ownerEquipmentsRouter);
+app.use("/payments", paymentRouter);
 
 export default app;

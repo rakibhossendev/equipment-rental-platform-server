@@ -19,3 +19,4 @@ export async function connectToDb() {
 // Collections
 export const equipment = database.collection("equipments");
 export const user = database.collection("user");
+export const bookings = database.collection("bookings")
