@@ -3,7 +3,7 @@ import { MongoClient } from "mongodb";
 
 export const DB_NAME = "equipment-rental-platform-db";
 
-const client = new MongoClient(env.DATABASE_URL);
+export const client = new MongoClient(env.DATABASE_URL);
 let database = client.db(DB_NAME);
 
 export async function connectToDb() {
@@ -19,4 +19,5 @@ export async function connectToDb() {
 // Collections
 export const equipment = database.collection("equipments");
 export const user = database.collection("user");
-export const bookings = database.collection("bookings")
+export const bookings = database.collection("bookings");
+export const payments = database.collection("payments");
