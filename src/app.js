@@ -14,7 +14,8 @@ import myRentalsRouter from "./routes/rentals/myRental.route.js";
 import favoriteRouter from "./routes/favorite/favorite.route.js";
 import adminRentalsRouter from "./routes/rentals/adminRental.route.js";
 import adminActionRouter from "./routes/equipments/action.admin.route.js"
-import ownerActionRouter from "./routes/equipments/owner.action.route.js"
+import ownerActionRouter from "./routes/equipments/owner.action.route.js";
+import ownerRentalsRouter from "./routes/rentals/ownerRental.route.js"
 
 const app = express();
 
@@ -39,6 +40,7 @@ app.use("/my-rentals",myRentalsRouter);
 app.use("/favorites",favoriteRouter);
 app.use("/all-rentals",adminRentalsRouter);
 app.use("/admin-action",adminActionRouter);
-app.use("/owner-action",ownerActionRouter)
+app.use("/owner-action",ownerActionRouter);
+app.use("/owner-rentals",ownerRentalsRouter)
 
 export default app;
