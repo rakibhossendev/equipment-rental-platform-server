@@ -2,11 +2,11 @@
 import { Router } from "express";
 import { equipment } from "../../config/db.js";
 import { sendAPIResponse } from "../../utils/apiResponse.js";
-import { checkAuthenticateUser } from "../../middleware/auth.js";
+import { checkAuthenticateUser, verifyRole } from "../../middleware/auth.js";
 
 const addEquipmentRouter = Router();
 
-addEquipmentRouter.post("/",checkAuthenticateUser, async (request, response) => {
+addEquipmentRouter.post("/",checkAuthenticateUser,verifyRole("owner"), async (request, response) => {
     try {
         const data = request.body;
         const result = await equipment.insertOne(data);

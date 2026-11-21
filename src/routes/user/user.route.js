@@ -7,7 +7,7 @@ import { ObjectId } from "mongodb";
 
 const userRouter = Router();
 
-userRouter.get("/", checkAuthenticateUser, async (request, response) => {
+userRouter.get("/", checkAuthenticateUser,verifyRole("admin"), async (request, response) => {
     try {
         const users = await user.find().toArray();
 

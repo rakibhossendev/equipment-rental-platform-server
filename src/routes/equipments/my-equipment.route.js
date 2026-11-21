@@ -6,7 +6,7 @@ import { equipment } from "../../config/db.js";
 
 const ownerEquipmentsRouter = Router();
 
-ownerEquipmentsRouter.get("/", checkAuthenticateUser, verifyRole("owner"),
+ownerEquipmentsRouter.get("/", checkAuthenticateUser,verifyRole("owner"), verifyRole("owner"),
     async (request, response) => {
         try {
             const creatorEmail = request.user.email;

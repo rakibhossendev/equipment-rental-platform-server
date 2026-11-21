@@ -4,6 +4,7 @@ import Router from "express";
 import { sendAPIResponse } from "../../utils/apiResponse.js";
 import { equipment } from "../../config/db.js";
 import { ObjectId } from "mongodb";
+import { checkAuthenticateUser, verifyRole } from "../../middleware/auth.js";
 
 const getEquipmentsRouter = Router();
 
@@ -72,7 +73,7 @@ getEquipmentsRouter.get("/", async (request, response) => {
     }
 });
 
-getEquipmentsRouter.get("/all-equipments", async (request, response) => {
+getEquipmentsRouter.get("/all-equipments",verifyRole("admin"), async (request, response) => {
     try {
         const data = await equipment.find().sort({ createdAt: -1 }).toArray();
         return sendAPIResponse(response, data, true, 200, "User equipment fetched successfully");
@@ -84,7 +85,7 @@ getEquipmentsRouter.get("/all-equipments", async (request, response) => {
 
 
 
-getEquipmentsRouter.get("/:id", async (request, response) => {
+getEquipmentsRouter.get("/:id",checkAuthenticateUser,verifyRole("customer"), async (request, response) => {
     try {
         const { id } = request.params;
 
