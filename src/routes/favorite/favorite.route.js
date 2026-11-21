@@ -63,4 +63,39 @@ favoriteRouter.post("/", checkAuthenticateUser, verifyRole("customer"), async (r
     }
 });
 
+favoriteRouter.get("/", checkAuthenticateUser, verifyRole("customer"), async (request, response) => {
+    try {
+        const userId = request.user.id;
+        const favoritesData = await favorites.find({ userId }).sort({ createdAt: -1 }).toArray();
+        return sendAPIResponse(response, favoritesData, true, 200, "Favorites fetched successfully");
+    } catch (error) {
+        console.error("Get favorites error:", error);
+        return sendAPIResponse(response, null, false, 500, "Internal server error");
+    }
+});
+
+
+favoriteRouter.delete("/:id", checkAuthenticateUser, verifyRole("customer"), async (request, response) => {
+    try {
+        const { id } = request.params;
+        const userId = request.user.id;
+
+        if (!ObjectId.isValid(id)) {
+            return sendAPIResponse(response, null, false, 400, "Invalid favorite ID");
+        }
+
+        const result = await favorites.deleteOne({ _id: new ObjectId(id), userId, });
+
+        if (result.deletedCount === 0) {
+            return sendAPIResponse(response, null, false, 404, "Favorite not found");
+        }
+
+        return sendAPIResponse(response, { deletedId: id }, true, 200, "Favorite removed successfully");
+    } catch (error) {
+        console.error("Remove favorite error:", error);
+
+        return sendAPIResponse(response, null, false, 500, "Internal server error");
+    }
+}
+);
 export default favoriteRouter;
