@@ -13,6 +13,7 @@ import webhookRouter from "./routes/booking/webhook.route.js";
 import myRentalsRouter from "./routes/rentals/myRental.route.js";
 import favoriteRouter from "./routes/favorite/favorite.route.js";
 import adminRentalsRouter from "./routes/rentals/adminRental.route.js";
+import adminActionRouter from "./routes/equipments/delete.admin.route.js"
 
 
 const app = express();
@@ -40,6 +41,7 @@ app.use("/my-equipments", ownerEquipmentsRouter);
 app.use("/payments", paymentRouter);
 app.use("/my-rentals",myRentalsRouter);
 app.use("/favorites",favoriteRouter);
-app.use("/all-rentals",adminRentalsRouter)
+app.use("/all-rentals",adminRentalsRouter);
+app.use("/admin-action",adminActionRouter)
 
 export default app;
