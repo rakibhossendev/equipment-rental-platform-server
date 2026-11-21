@@ -8,7 +8,7 @@ import { checkAuthenticateUser, verifyRole } from "../../middleware/auth.js";
 
 const adminActionRouter = Router();
 
-adminActionRouter.delete("/delete/:id", checkAuthenticateUser, verifyRole("admin"), async (request, response) => {
+adminActionRouter.delete("/delete/:id", checkAuthenticateUser, verifyRole("admin","owner"), async (request, response) => {
   try {
     const { id } = request.params;
 

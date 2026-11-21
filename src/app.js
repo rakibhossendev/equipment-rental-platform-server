@@ -14,7 +14,7 @@ import myRentalsRouter from "./routes/rentals/myRental.route.js";
 import favoriteRouter from "./routes/favorite/favorite.route.js";
 import adminRentalsRouter from "./routes/rentals/adminRental.route.js";
 import adminActionRouter from "./routes/equipments/action.admin.route.js"
-
+import ownerActionRouter from "./routes/equipments/owner.action.route.js"
 
 const app = express();
 
@@ -22,11 +22,7 @@ app.use(cors());
 app.use(morgan("dev"));
 
 
-app.use(
-    "/payments/webhook",
-    express.raw({ type: "application/json" }),
-    webhookRouter
-);
+app.use("/payments/webhook",express.raw({ type: "application/json" }),webhookRouter);
 
 
 app.use(express.json());
@@ -42,6 +38,7 @@ app.use("/payments", paymentRouter);
 app.use("/my-rentals",myRentalsRouter);
 app.use("/favorites",favoriteRouter);
 app.use("/all-rentals",adminRentalsRouter);
-app.use("/admin-action",adminActionRouter)
+app.use("/admin-action",adminActionRouter);
+app.use("/owner-action",ownerActionRouter)
 
 export default app;
