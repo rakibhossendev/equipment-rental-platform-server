@@ -128,4 +128,40 @@ ownerActionRouter.patch("/update/:id", checkAuthenticateUser, verifyRole("owner"
     }
 }
 );
+
+ownerActionRouter.delete("/delete/:id", checkAuthenticateUser, verifyRole("owner"), async (request, response) => {
+    try {
+        const { id } = request.params;
+        const ownerEmail = request.user?.email;
+
+        if (!ObjectId.isValid(id)) {
+            return sendAPIResponse(response, null, false, 400, "Invalid equipment ID");
+        }
+
+        // Verify equipment exists and belongs to the authenticated owner
+        const existingEquipment = await equipment.findOne({
+            _id: new ObjectId(id),
+            creatorEmail: ownerEmail,
+        });
+
+        if (!existingEquipment) {
+            return sendAPIResponse(response, null, false, 404, "Equipment not found or unauthorized");
+        }
+
+        const result = await equipment.deleteOne({
+            _id: new ObjectId(id),
+            creatorEmail: ownerEmail,
+        });
+
+        if (result.deletedCount === 0) {
+            return sendAPIResponse(response, null, false, 400, "Failed to delete equipment");
+        }
+
+        return sendAPIResponse(response, { deletedId: id }, true, 200, "Equipment deleted successfully");
+    } catch (error) {
+        console.error("Owner delete equipment error:", error);
+        return sendAPIResponse(response, null, false, 500, "Internal server error");
+    }
+});
+
 export default ownerActionRouter
