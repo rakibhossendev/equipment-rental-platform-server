@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors"
-import router from "./routes/home.route.js";
+import homeRouter from "./routes/home.route.js";
 import morgan from "morgan"
 import userRouter from "./routes/user/user.route.js";
 import addEquipmentRouter from "./routes/equipments/add-equipments.route.js";
@@ -29,7 +29,7 @@ app.use(
 
 app.use(express.json());
 
-app.use("/", router);
+app.use("/", homeRouter);
 app.use("/users", userRouter);
 app.use("/add-equipment", addEquipmentRouter);
 app.use("/equipments", getEquipmentsRouter);
